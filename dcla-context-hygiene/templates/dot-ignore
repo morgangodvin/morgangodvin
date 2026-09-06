@@ -1,0 +1,65 @@
+# DCLA root search ignore  —  install as:  <DCLA-root>/.ignore
+#
+# Purpose: keep broad tools (ripgrep, fd, and anything honouring .ignore) out of
+# generated, vendored, and cache trees. This is the single largest reduction in
+# routine context cost, because the tax comes from enumeration, not from bytes
+# sitting on disk.
+#
+# DELIBERATELY NOT IGNORED — these can be authoritative research inputs,
+# tracked website output, or operational handoffs:
+#   *.zip  *.csv  *.pdf  *.ndjson (except *.inspect.ndjson)  dist/ under
+#   published sites  .claude/ generally
+# Use `rg --no-ignore` for intentional forensic searches.
+
+# --- dependency + virtualenv trees -----------------------------------------
+**/node_modules/
+**/.venv/
+**/venv/
+**/.tox/
+**/__pycache__/
+**/*.egg-info/
+
+# --- VCS internals ----------------------------------------------------------
+**/.git/
+
+# --- build output / framework caches ---------------------------------------
+**/dist/
+**/build/
+**/.next/
+**/.nuxt/
+**/.vercel/
+**/.turbo/
+**/.parcel-cache/
+
+# --- tooling caches ---------------------------------------------------------
+**/.pytest_cache/
+**/.mypy_cache/
+**/.ruff_cache/
+**/.ipynb_checkpoints/
+**/coverage/
+**/.cache/
+
+# --- minified / generated artefacts ----------------------------------------
+**/*.min.js
+**/*.min.css
+**/*.map
+
+# --- OS noise ---------------------------------------------------------------
+**/.DS_Store
+**/Thumbs.db
+
+# --- project-specific -------------------------------------------------------
+# Regenerable inspection dumps (~436 MiB when present). If these are ever
+# needed for a real search, use --no-ignore; final workbooks/reports/previews
+# are the canonical artefacts.
+**/*.inspect.ndjson
+
+# Archived research diary: preserved in full under history/, but must never be
+# swept into a broad search. See CLAUDE.md router.
+**/history/research-log-B1232-B1457/
+
+# NOTE: site-mockups/.claude/worktrees/ is INTENTIONALLY OMITTED here.
+# Adding it while the website Git/worktree resolution is still in flight would
+# hide live state from the session doing that work. Add this line only after
+# that work has landed:
+# site-mockups/.claude/worktrees/

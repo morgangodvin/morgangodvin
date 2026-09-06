@@ -1,0 +1,55 @@
+# Drug Price Pilot — agent router
+
+Install at:
+`/Users/morgangodvin/Claude Code/DCLA/Drug Checking History/drug-price-pilot/CLAUDE.md`
+
+Durable invariants only. No per-run status, no dates except the one below.
+
+Last updated: 2026-09-06
+
+## Authoritative state
+
+- **V94 R1** is the current authoritative internal release. Anything describing
+  an earlier release is history, not instruction.
+- Root `README.md` is a **mutable companion document**. It is NOT a hash-pinned
+  release member. See `V94-R1-ERRATA.md`.
+- The sealed V94 R1 README byte-state lives at
+  `history/README-V94R1-SEALED-5f5ce659.md` and is the verification target for
+  that manifest entry.
+
+## Where to go
+
+| Task | Read |
+|---|---|
+| Dashboard work | V94 internal-analysis README + its data files |
+| Research continuation | newest entry in the research log only |
+| Schema / method work | the relevant protocol file |
+| Release / manifest work | V94 manifest + `V94-R1-ERRATA.md` |
+
+Do **not** read `history/research-log-B1232-B1457/` (1,663 lines, archived
+reverse-chronological diary) unless a task explicitly names a B-number in that
+range. It is preserved for provenance, not for context.
+
+## Reading rules
+
+- Before opening any file over ~1,000 lines, check size and headings first
+  (`wc -lc`, `rg '^#'`), then read only the relevant section.
+- **Never read a data file whole.** No `cat`/full-file Read on `.csv`, `.tsv`,
+  `.ndjson`, `.json`, `.xlsx`, or any file in a data directory. Use
+  `scripts/peek.sh <file>`, or `wc -l`, `head -n 20`, or a query script.
+- Prefer `rg` with a match cap over listing directories recursively.
+
+## Writing rules
+
+- README: current state, entry points, commands, blockers, canonical outputs.
+  Hard ceiling 250 lines / 25 KB. Enforced by `scripts/check-doc-budgets.sh`.
+- README contains **no dates** except a single "Last updated" line. Per-run
+  chronology goes in dated files under `history/` or `logs/`, never appended
+  to a living document.
+- CLAUDE.md / AGENTS.md: durable invariants only, 150 lines max.
+- One concise current handoff; everything prior becomes immutable dated history.
+
+## Inherited from DCLA parent
+
+Privacy and aggregate-output rules from the parent DCLA project apply in full
+and are not restated here. Do not emit individual-level identifiers.

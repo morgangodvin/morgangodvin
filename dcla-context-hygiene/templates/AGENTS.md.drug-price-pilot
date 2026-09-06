@@ -1,0 +1,10 @@
+# Drug Price Pilot
+
+Agent instructions for this project live in `CLAUDE.md` in this directory.
+Read that file. Do not duplicate its content here — a second copy drifts.
+
+Two rules repeated because violating them is expensive:
+
+1. Never read a data file whole. Use `scripts/peek.sh`, `head`, or a query.
+2. Never read `history/research-log-B1232-B1457/` unless a task names a
+   B-number in that range.
