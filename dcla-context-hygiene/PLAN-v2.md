@@ -48,11 +48,27 @@ open them. Disk cleanup is a separate goal, tracked separately.
 
 ### Phase 1 — free wins, no blockers
 
-**1.1 Verify then install the root ignore.**
-Run `scripts/verify-ignore-is-honoured.sh` from a project subdirectory FIRST.
-If it fails, apply the `RIPGREP_CONFIG_PATH` fix it prints before installing.
-An `.ignore` that is not honoured is worse than none: it creates false
-confidence. Install `templates/dot-ignore` as `<DCLA-root>/.ignore`.
+**1.1 Install the ignore at BOTH the DCLA root and each project root.**
+
+Empirically confirmed 2026-09-06: ripgrep honours an `.ignore` located in the
+directory being searched, unconditionally. Discovery of a *parent* `.ignore`
+is not reliable when the tree is not a single Git repository, which DCLA is
+not. So the per-project copy is the mechanism that actually works; the
+DCLA-root copy is a convenience for searches started at the root.
+
+    cp templates/dot-ignore "<DCLA-root>/.ignore"
+    cp templates/dot-ignore "<each-active-project-root>/.ignore"
+
+Then verify from a project subdirectory with
+`scripts/verify-ignore-is-honoured.sh <dir>`. That script requires ripgrep and
+exits 2 rather than reporting a pass if ripgrep is missing.
+
+**Ripgrep availability.** `rg` is not on Morgan's shell PATH (`brew install
+ripgrep` to add it). This does not neutralise the `.ignore`: Claude Code ships
+its own bundled ripgrep for its search tool, which honours `.ignore` files
+regardless of what is on PATH. Installing `rg` is about being able to verify
+that behaviour, and about Morgan's own shell searches. Whether Codex or other
+agents honour `.ignore` is unverified and should not be assumed.
 
 Do not add `site-mockups/.claude/worktrees/` yet — it would hide live state
 from the session resolving the website worktrees. Add it after that lands.
