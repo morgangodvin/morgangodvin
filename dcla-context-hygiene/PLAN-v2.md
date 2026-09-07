@@ -44,6 +44,94 @@ open them. Disk cleanup is a separate goal, tracked separately.
 - Photos verification-cache copies removed after second-device confirmation.
 - CADOJ workbook builder preserved; large inspection artefacts removed.
 
+## Phase 0 — the finding that outranks everything above
+
+Added 2026-09-06 after measuring the live tree. This displaces the `.ignore`
+as the highest-value action.
+
+**Measured, not assumed.** `drug-price-pilot` enumerates 30,240 files. Only
+119 of them (0.4%) are generated/vendored, so the `.ignore` recovers almost
+nothing there. The cost is elsewhere:
+
+- ~9,900 image files (8,878 png, 840 webp, 195 jpg). No HEIC — these are
+  machine-generated, not photographs.
+- 11,400 data files (5,709 csv, 5,592 json, 111 tsv) — authoritative, must
+  stay searchable.
+- 22,365 files (74% of the project) live under `incoming/`.
+
+**One directory holds 7,036 of them:**
+`incoming/CENSUS-CLUSTER-051-DPP-B96-S001-PRIMARY-REVIEW-20260905/_superseded`
+
+6,319 of those files are byte-identical copies of one failed render
+(`_superseded/pre-A011/raw/pdftohtml-fragments/`, sha1 `72a37e01...`). It is
+the debris of a retry loop that ran four to five hours on 2026-09-05. Sibling
+clusters hold 46-177 files each. Morgan confirms the runaway.
+
+DCLA-wide, **~10,400 files are already marked dead** by the existing
+`_quarantine` / `_superseded` convention: 8,496 matching "superseded", 1,888
+matching "quarantine", 17 "deprecated". The convention is sound. Nothing
+purges it.
+
+### Bucket A — trash now, unambiguous
+
+`Drug Checking History/drug-price-pilot/incoming/CENSUS-CLUSTER-051-DPP-B96-S001-PRIMARY-REVIEW-20260905/_superseded`
+(7,036 files). Retain one copy of the failed render as evidence of the
+incident; 6,319 copies document it no better than one does. This single
+deletion cuts the project's file count ~23% and is lower-risk than every item
+in the disk-cleanup section.
+
+### Bucket B — ask Morgan first, creative assets
+
+Superseded image generations under project `_quarantine` directories:
+`meet-the-tranqs-carousel` (813), `video-character-elements` (290),
+`supply-report-social-2026-09` (238), `poppy-drug-checking-reel` (66),
+`drug-checking-history-p2-carousel` (35), and the smaller tails.
+
+These are discarded generations, not machine debris, and Morgan reviews image
+options via contact sheet. Build a contact sheet before trashing any of them.
+
+### Bucket C — do not touch in this pass
+
+`site-mockups/_quarantine` and both `site-mockups/.claude/worktrees/*/
+_quarantine` directories. Website work is out of scope and another session is
+active there.
+
+### Ignore images, never ignore data
+
+A PNG can never be a text search hit, and ripgrep already skips binaries
+during content search, so the cost of images is pure enumeration. Ignoring
+them is free:
+
+    **/*.png
+    **/*.webp
+    **/*.jpg
+    **/*.jpeg
+    **/*.svg
+    **/*.pyc
+    **/*.gz
+    **/*.bin
+
+The 11,400 csv/json/tsv files must NOT be ignored — they are authoritative
+inputs and searching them is legitimate. Their risk is an agent reading one
+whole, which is what `peek.sh` and the router's never-read-data-files-whole
+rule exist to prevent. On this evidence that rule is the single highest-value
+line in the router.
+
+### Prevention — scratch discipline and a bloat guard
+
+The runaway wrote 7,036 files into an authoritative inbound directory. Neither
+v1 nor this plan's earlier sections addressed that failure mode.
+
+1. Agent intermediates go to `.scratch/<run-id>/`, which is in `.ignore` and
+   purgeable wholesale. Nothing writes intermediates into `incoming/`.
+2. Only a deliberate promotion step moves a finished artefact into `incoming/`.
+3. `scripts/check-dir-bloat.sh` flags any directory over 500 immediate files
+   and reports its most-repeated file hash. At 500 it would have tripped within
+   minutes of the loop starting rather than after four hours.
+4. `_quarantine` and `_superseded` get a retention window. The same script
+   lists any older than 30 days. The convention already exists; it just needs
+   something that empties it.
+
 ## Order of work
 
 ### Phase 1 — free wins, no blockers
