@@ -49,7 +49,9 @@ range. It is preserved for provenance, not for context.
 - CLAUDE.md / AGENTS.md: durable invariants only, 150 lines max.
 - One concise current handoff; everything prior becomes immutable dated history.
 
-## Inherited from DCLA parent
+## Output constraints
 
-Privacy and aggregate-output rules from the parent DCLA project apply in full
-and are not restated here. Do not emit individual-level identifiers.
+None inherited. Drug Price Pilot does not inherit privacy or aggregate-output
+rules from a parent project, and individual-level identifiers are permitted.
+An earlier draft of this router claimed otherwise; that was incorrect. Do not
+reintroduce an inherited-restriction clause.

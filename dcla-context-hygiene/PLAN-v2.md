@@ -21,6 +21,11 @@ Supersedes: `archive/superseded PLANFORCLAUDEREVIEW archive.md`
    `peek.sh` helper so the right way is the easy way.
 6. **Two verification steps upgraded from judgement to mechanical checks**
    (diary reassembly; CADOJ builder acceptance).
+7. **v1's inherited-privacy claim is dropped.** v1 line 105 directed the router
+   to "preserve DCLA privacy and aggregate-output rules inherited from the
+   parent project." Morgan confirms Drug Price Pilot inherits no such rules and
+   that individual-level identifiers are permitted. The claim was wrong in v1
+   and is removed, not softened. Do not reintroduce it.
 
 ## Objective (unchanged)
 
